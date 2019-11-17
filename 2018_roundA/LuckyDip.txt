@@ -1,0 +1,42 @@
+#include <algorithm>
+#include <cmath>
+#include <cmath>
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+using namespace std;
+typedef long long ll;
+ll a[20010];
+ll sum[50010];
+double dp[50010];
+int main()
+{
+	int T;
+	cin >> T;
+	for (int cas = 1; cas <= T; cas++) {
+		ll N = 0;
+		ll K = 0;
+		cin >> N >> K;
+		for (int i = 0; i < N; i++)
+		{
+			cin >> a[i];
+		}
+		sort(a, a + N);
+		sum[N] = 0;
+		for (int i = N - 1; i >= 0; i--)
+		{
+			sum[i] = sum[i+1] + a[i];
+		}
+		dp[0] = (double)sum[0] / N;
+		for (int i = 1; i <= K; i++)
+		{
+			int cnt = upper_bound(a, a + N, dp[i - 1]) - a;//find the first position where value is larger than dp[i-1]
+			dp[i] = (cnt * dp[i - 1] + sum[cnt]) / N; //before that position, the value is dp[i-1], after that value is sum[cnt]                                                
+		}
+		printf("Case #%d: %f\n", cas, dp[K]);
+	}
+}

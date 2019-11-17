@@ -1,0 +1,113 @@
+#include <algorithm>
+#include <cmath>
+#include <cmath>
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+using namespace std;
+typedef long long ll;
+ll findlarger(ll n)
+{
+	int cnt = 0;
+	int num[20];
+	ll temp = n;
+	do
+	{
+		num[cnt++] = n % 10;
+		n /= 10;
+	} while (n);
+	for (int i = cnt-1; i>=0; i--)
+	{
+		if (num[i] & 1)
+		{
+			if (num[i] == 9)
+			{
+				int j = i + 1;
+				while (num[j] == 8)
+				{
+					j++;
+				}
+				num[j] += 2;
+				while ((--j) >= 0)
+				{
+					num[j] = 0;
+				}
+			}
+			else
+			{
+				num[i]++;
+				for (int j = i - 1; j >= 0; j--)
+				{
+					num[j] = 0;
+				}
+			}
+			break;
+		}
+	}
+	ll ans = 0;
+	for (int i = cnt - 1; i >= 0; i--)
+	{
+		ans = ans * 10 + num[i];
+	}
+	if ((ans == 0)&&(temp!=0))
+	{
+		ans = 2 * pow(10, cnt);
+	}
+	return ans;
+	
+}
+ll findsmaller(ll n)
+{
+	int cnt = 0;
+	int num[20];
+	do
+	{
+		num[cnt++] = n % 10;
+		n /= 10;
+	} while (n);
+	for (int i = cnt -1; i >=0; i--)
+	{
+		if (num[i] & 1)
+		{
+			num[i]--;
+			for (int j = i - 1; j >= 0; j--)
+			{
+				num[j] = 8;
+			}
+			break;
+		}
+	}
+	ll ans = 0;
+	for (int i = cnt - 1; i >= 0; i--)
+	{
+		ans = ans * 10 + num[i];
+	}
+	return ans;
+}
+int main()
+{
+	int T;
+	cin >> T;
+	for (int cas = 1; cas <= T; cas++) {
+		ll  n = 0;
+		cin >> n ;
+		ll output1 = 0;
+		ll output2 = 0;
+		ll output = 0;
+		output1 = findlarger(n)- n;
+		output2 = n - findsmaller(n);
+		if (output1 > output2)
+		{
+			output = output2;
+		}
+		else
+		{
+			output = output1;
+		}
+		printf("Case #%d: %llu\n", cas, output);
+	}
+}
